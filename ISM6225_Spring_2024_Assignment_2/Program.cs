@@ -99,12 +99,41 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                //test
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Check if the input array is null or empty
+                // If so, return 0 since there are no elements to process
+                if (nums == null || nums.Length == 0)
+                    return 0;
+
+                // Initialize a pointer 'uniqueIndex' to keep track of the position
+                // where the next unique element should be placed
+                int uniqueIndex = 0;
+
+                // Iterate through the array starting from index 1
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    // Compare the current element with the last unique element
+                    // If they are different, it means we have found a new unique element
+                    if (nums[i] != nums[uniqueIndex])
+                    {
+                        // Increment 'uniqueIndex' to point to the next position
+                        // where the new unique element should be placed
+                        uniqueIndex++;
+
+                        // Place the new unique element at the 'uniqueIndex' position
+                        nums[uniqueIndex] = nums[i];
+                    }
+                    // If the current element is the same as the last unique element,
+                    // skip it and continue to the next element
+                }
+
+                // Return the count of unique elements
+                // Since 'uniqueIndex' is zero-based, we add 1 to get the count
+                return uniqueIndex + 1;
             }
             catch (Exception)
             {
+                // If any exception occurs during the execution of the code,
+                // catch it and rethrow it to be handled by the calling code
                 throw;
             }
         }
@@ -135,11 +164,36 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<int>();
+                // Return empty list if input array is null or empty
+                if (nums == null || nums.Length == 0)
+                    return new List<int>();
+
+                // Pointer to track position of next non-zero element
+                int nonZeroIndex = 0;
+
+                // Move non-zero elements to the front of the array
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] != 0)
+                    {
+                        nums[nonZeroIndex] = nums[i];
+                        nonZeroIndex++;
+                    }
+                }
+
+                // Fill remaining positions with zeros
+                while (nonZeroIndex < nums.Length)
+                {
+                    nums[nonZeroIndex] = 0;
+                    nonZeroIndex++;
+                }
+
+                // Convert modified array to list and return
+                return nums.ToList();
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -186,11 +240,64 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return new List<IList<int>>();
+                // Create a list to store the triplets
+                IList<IList<int>> result = new List<IList<int>>();
+
+                // Return empty list if input array is null or has fewer than 3 elements
+                if (nums == null || nums.Length < 3)
+                    return result;
+
+                // Sort the array in ascending order
+                Array.Sort(nums);
+
+                // Iterate through the array, fixing the first element of the triplet
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    // Skip duplicate elements to avoid duplicate triplets
+                    if (i > 0 && nums[i] == nums[i - 1])
+                        continue;
+
+                    // Initialize pointers for the remaining two elements
+                    int left = i + 1;
+                    int right = nums.Length - 1;
+
+                    // Find pairs that sum up to the negation of the fixed element
+                    while (left < right)
+                    {
+                        int sum = nums[i] + nums[left] + nums[right];
+
+                        if (sum == 0)
+                        {
+                            // Found a triplet, add it to the result list
+                            result.Add(new List<int>() { nums[i], nums[left], nums[right] });
+
+                            // Skip duplicate elements to avoid duplicate triplets
+                            while (left < right && nums[left] == nums[left + 1])
+                                left++;
+                            while (left < right && nums[right] == nums[right - 1])
+                                right--;
+
+                            left++;
+                            right--;
+                        }
+                        else if (sum < 0)
+                        {
+                            // Sum is too small, move the left pointer to increase the sum
+                            left++;
+                        }
+                        else
+                        {
+                            // Sum is too large, move the right pointer to decrease the sum
+                            right--;
+                        }
+                    }
+                }
+
+                return result;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -221,11 +328,32 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables to keep track of the count of consecutive ones
+                int maxOnes = 0;
+                int currentOnes = 0;
+
+                // Iterate through the array
+                foreach (int num in nums)
+                {
+                    if (num == 1)
+                    {
+                        // If the current element is 1, increment the count of consecutive ones
+                        currentOnes++;
+                        // Update the maximum count if necessary
+                        maxOnes = Math.Max(maxOnes, currentOnes);
+                    }
+                    else
+                    {
+                        // If the current element is 0, reset the count of consecutive ones
+                        currentOnes = 0;
+                    }
+                }
+
+                return maxOnes;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -257,11 +385,31 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Initialize variables for decimal conversion
+                int decimalNumber = 0;
+                int baseValue = 1;
+
+                // Iterate through each digit of the binary number
+                while (binary > 0)
+                {
+                    // Get the last digit of the binary number
+                    int lastDigit = binary % 10;
+
+                    // Remove the last digit from the binary number
+                    binary = binary / 10;
+
+                    // Add the contribution of the last digit to the decimal number
+                    decimalNumber += lastDigit * baseValue;
+
+                    // Update the base value for the next iteration
+                    baseValue *= 2;
+                }
+
+                return decimalNumber;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -295,11 +443,28 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return 0;
+                // Return 0 if the array contains less than 2 elements
+                if (nums.Length < 2)
+                    return 0;
+
+                // Sort the array in ascending order
+                Array.Sort(nums);
+
+                // Initialize a variable to store the maximum gap
+                int maxGap = 0;
+
+                // Iterate through the sorted array up to the second-to-last element
+                for (int i = 0; i < nums.Length - 1; i++)
+                {
+                    // Update the maximum gap if the current gap is larger
+                    maxGap = Math.Max(maxGap, nums[i + 1] - nums[i]);
+                }
+
+                return maxGap;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -335,11 +500,31 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
+                // Return 0 if the array has less than 3 elements
+                if (nums == null || nums.Length < 3)
+                    return 0;
+
+                // Sort the array in descending order
+                Array.Sort(nums);
+                Array.Reverse(nums);
+
+                // Iterate through the sorted array starting from the first element
+                for (int i = 0; i < nums.Length - 2; i++)
+                {
+                    // Check if the current three elements form a valid triangle
+                    if (nums[i] < nums[i + 1] + nums[i + 2])
+                    {
+                        // Return the perimeter of the valid triangle
+                        return nums[i] + nums[i + 1] + nums[i + 2];
+                    }
+                }
+
+                // If no valid triangle is found, return 0
                 return 0;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
@@ -389,11 +574,29 @@ namespace ISM6225_Spring_2024_Assignment_2
         {
             try
             {
-                // Write your code here and you can modify the return value according to the requirements
-                return "";
+                // Check if either s or part is null or empty
+                if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(part))
+                    return s;
+
+                // Find the index of the first occurrence of part in s
+                int index = s.IndexOf(part);
+
+                // Keep removing occurrences of part until no more are found
+                while (index != -1)
+                {
+                    // Remove the occurrence of part from s
+                    s = s.Remove(index, part.Length);
+
+                    // Find the index of the next occurrence of part in the updated s
+                    index = s.IndexOf(part);
+                }
+
+                // Return the modified string s
+                return s;
             }
             catch (Exception)
             {
+                // Rethrow any exceptions for handling by calling code
                 throw;
             }
         }
